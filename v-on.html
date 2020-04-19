@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>v-on</title>
+</head>
+<body>
+<div id="app">
+  <div>v-on传递参数使用</div>
+<!-- 调用方法时方法中没有参数。加不加小括号效果一样 -->
+  <button @click="btnclick()">点击1</button>
+  <button @click="btnclick">点击2</button>
+<!-- 调用方法时方法中参数为字符串要加引号。不加引号vue理解为变量 -->
+  <button v-on:click="btn1click('message')">点击3_1</button>
+  <button v-on:click="btn1click(message)">点击3_2</button>
+<!-- 如果函数需要参数，但没有传入，那么函数的形参是undefined -->
+  <button @click="btn1click()">点击4</button>
+<!-- 调用方法时省略了小括号，但方法中需要参数。这时候VUE会将浏览器的event对象作为参数传入方法中 -->
+  <button @click="btn1click">点击5</button>
+<!-- 需要event对象又需要其他参数，调用方式，手动获取浏览器的event对象：$event -->
+  <button @click="btn2click('abc',$event)">点击6</button>
+  <br/>  <br/>
+  <div>v-on修饰符使用</div>
+<!-- .stop修饰符，加入.stop只响应btnClicks，完成后立即stop 不进行其他响应 -->
+  <div @click="divClicks"><button @click.stop="btnClicks">冒泡</button></div>
+  <br/>  <br/>
+<!-- 某些标签拥有自身的默认事件，如a[href="#"]，button[type="submit"] 这种标签在冒泡结束后会开始执行默认事件.prevent阻止默认事件 然后在方法中执行事件 -->
+<form action="google"><input type="submit" value="提交" @click.prevent="submitClick"></form>
+<br/>  <br/>
+<!-- 监听某个键盘的键帽 如回车-->
+<input type="text" @keyup.enter="onKeyup">
+<br/>  <br/>
+<!-- . once：设置事件只能触发一次，比如按钮的点击等。 -->
+<button @click.once="clickOnce">只能触发一次</button>
+</div>
+<script src="https://cdn.bootcss.com/vue/2.6.11/vue.js"></script>
+<script>
+  const app =new Vue({
+    el:'#app',
+    data:{
+      message:'这是个变量',
+    },
+    methods:{
+      btnclick(){
+        console.log("点击");
+      },
+      btn1click(a){
+        console.log("这是"+a);
+        
+      },
+      btn2click(a,$event){
+        console.log('+++++',a,$event);
+        
+      },
+      divClicks(){
+        console.log('divClicks');
+      },
+      btnClicks(){
+        console.log('btnClicks');
+      },
+      submitClick(){
+        console.log('submitClick');        
+      },
+      onKeyup(){
+        console.log('onKeyup');        
+      },
+      clickOnce(){
+        console.log('clickOnce');
+      }
+    }
+  })
+</script>
+</body>
+</html>
