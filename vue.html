@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+
+<link href="http://www.cmf.com/assets/css/bootstrap.min.css" rel="stylesheet" />
+
+<title>视频管理</title>
+</head>
+<body>
+
+
+ 
+
+   
+<div class="panel panel-default" id='app'>
+    <div class="panel-heading">
+        <h3 class="panel-title">视频管理</h3>
+    </div>
+    <div class="panel-body" v-for="(v,index) in videos"  :key="index">
+        <div class="form-group">
+            <label for="">视频标题</label>
+            <input type="text" v-model="v.title" class="form-control" placeholder="视频标题" >
+        </div>
+        <div class="form-group">
+            <label for="">视频地址</label>
+            <input type="text" v-model="v.path" class="form-control" placeholder="视频地址" >
+        </div>
+        <button class="btn btn-danger" @click='del(index)'>删除视频</button>
+    </div>
+    <div class="panel-footer">
+        <button class="btn btn-primary" @click.prevent='add'>添加视频</button>
+    </div>
+    <textarea name='videos'>{{videos}}</textarea>
+</div>
+
+<script src="https://cdn.bootcss.com/vue/2.6.11/vue.js"></script>
+
+<script>
+!(function(vue){
+  new Vue({
+      el:'#app',
+      data:{
+            videos:[{title:'',path:''}],
+         
+      },
+      methods:{
+         del:function(index){
+             this.videos.splice(index,1);
+         },
+         add:function(){
+             this.videos.push({title:'',path:''})
+         }
+      },
+  })
+})();
+</script>
+
+</body>
+</html>

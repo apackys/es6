@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" id="txt_id" />
+   <input type="button" id="myBtn" value="xxoo"> 
+   <ul id="list"><li>111</li><li>222</li></ul>
+    <p id="pid"></p>
+    <button >1</button>
+    <button >2</button>
+    <button >3</button>
+    <button >4</button>
+    <button >5</button>
+    <script>
+        var _xxobj={};
+        Object.defineProperty(_xxobj,'xxoo',{
+            get:function(){
+                console.log('read')
+                return 'duqu';
+            },
+            set:function( newValue ){
+         
+                document.getElementById('txt_id').value = newValue;
+                document.getElementById('pid').innerHTML = newValue;
+            
+            }
+        });
+        document.getElementById('myBtn').addEventListener('click',function(){
+            console.log(myBtn.attributes.length)
+            var node = document.createElement('li');
+            var text = document.getElementById('txt_id').value;
+            var a = document.createTextNode(text)
+            node.appendChild(a);
+            document.getElementById('list').appendChild(node);
+/*             var text = document.createTextNode('caonima');
+            node.appendChild(text);
+            document.getElementById('list').appendChild(node); */
+            document.getElementById('pid').innerHTML = document.getElementById('list').textContent
+     })
+     document.getElementById('txt_id').addEventListener('keyup',function(e){
+         _xxobj.xxoo = e.target.value;
+        
+     });
+    /*    document.addEventListener('keyup',function(e){
+           console.log(e);
+           _xxobj.xxoo = e.target.value;
+       }); */
+
+       (function (w){
+
+        //此时会输出张培跃
+
+        console.log("啊"+w);
+
+        })('我')
+        obj1={
+            name:'zhangyishan',
+            age:22,
+            fn:function(){
+                return 'My name is '+this.name+' My age is '+this.age;
+            },
+            
+            get:function(){
+                var that = this;
+                return function(){
+                    return that.name;
+                }
+            }
+        }
+        console.log(obj1.get()());
+        console.log(obj1.fn());
+        setInterval(function(){
+            console.log('我其实是一个回调函数，每次1秒钟会被执行一次')
+        },1000)
+        var btns = document.getElementsByTagName('button')
+        for(let i=0; i<btns.length ; i++){
+           btns[i].addEventListener('click',function(){
+               console.log('这是第'+i+'个按钮');
+           });
+        }
+        var data ={name:'eason'};
+        Object.keys(data).forEach(function(key){
+            console.log(data,key,data[key]);
+        })
+    </script>
+</body>
+</html>

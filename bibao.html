@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>闭包</title>
+</head>
+<body>
+    <div class="haha"><ul>
+        <li >舒服舒服的</li>
+        <li>窃取服的</li></ul></div>
+<script>
+    
+
+
+    let lis =document.querySelectorAll('li');
+    lis.forEach((item)=>{
+        let text = item.innerHTML
+        item.addEventListener('click',function(){
+            console.log(text)
+        });
+        item = null;
+    })
+
+
+
+
+
+
+    let arr =[2,23,54,65,12,9,51,44];
+    let arr1=[
+        {title:'盒子模型0',click:55,price:300},
+        {title:'盒子模型1',click:115,price:500},
+        {title:'盒子模型2',click:155,price:260},
+        {title:'盒子模型3',click:125,price:190}]
+    function between(a,b){
+        return (v)=>{
+          return v >= a && v <= b ;
+        }
+    };
+    console.log(arr.filter(between(4,51)));
+
+
+    function interval(a,b)
+        {
+            return (v)=>{
+                return v.click >= a && v.click <= b;
+            }
+        }
+    console.table(arr1.filter(interval(100,200)));
+    function order(field,type='asc'){
+        return (a,b)=>
+        {
+            if(type == 'asc')
+                return a[field] > b[field] ? 1 : -1;
+          
+                return a[field] > b[field] ? -1 : 1;
+                     
+        }
+    }
+    console.table(arr1.sort(order('price','22')));
+
+    function hb(){
+        let n =1;
+        return function(){
+            console.log(++n);
+        }
+    }
+    let a = hb();
+    a();
+    function hd(){
+        let n = 1;
+        this.sum = ()=>{console.log(++n)};
+    }
+    let b = new hd()
+    b.sum();
+    b.sum();
+</script>
+</body>
+</html> 
