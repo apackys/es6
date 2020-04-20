@@ -3,12 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>v-if</title>
+  <title>v-for 为什么要加入key</title>
 </head>
+<style>[v-cloak]{
+  display: none;
+}
+.active{color :red;}</style>
 <body>
-<div id="app">
-  <ul><li v-for="(item,k) in arr">{{k+1}} - {{item}}</li></ul>
-  <ul><li v-for="(item,k,index) in info">{{index}} - {{k}} : {{item}}</li></ul>
+<div id="app" v-cloak>
+<!--   为什么要加入key?有Key会在内存中行程链表，当要插入一个新的节点时，效率更高。key的作用就是高效地更新虚拟DOM -->
+<!-- key 绑定为什么不用index 而是用item 是保证了key的唯一，比如在中间插入元素的时候 index就会位移 -->
+  <ul><li v-for="(item,k) in arr" :key="item" :class="{active : currentIndex === k}" @click="currentIndex = k">{{k+1}} - {{item}}</li></ul>
+  <ul><li v-for="(item,k,index) in info" :key="item">{{index}} - {{k}} : {{item}}</li></ul>
+  <button @click="changearr">修改数组</button>
 </div>
 <script src="https://cdn.bootcss.com/vue/2.6.11/vue.js"></script>
 <script>
@@ -22,10 +29,28 @@
         gender:'male',
         from:'china',
         height:1.2,
-      }
+      },
+      currentIndex:''
     },
     methods:{
-
+      changearr(){
+        //push 数组末尾添加
+        this.arr.push('aaa','bbb','ccc');
+        //unshift 数组前面添加
+        //this.arr.unshift('aaa','bbb','ccc')
+        //shift 数组前面删除
+       // this.arr.shift()
+        //pop 数组后面删除
+        //this.arr.pop()
+        //数据的增删改
+        //1 修改
+         //this.arr.splice(3,0,'aaa','bbb','ccc')  
+        //2  增加
+        //this.arr.splice(3,0,'aaa','bbb','ccc')
+        //删除
+         //this.arr.splice(1,1)
+      },
+ 
     },
     })
 </script>
