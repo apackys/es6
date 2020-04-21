@@ -35,10 +35,14 @@
   body > .el-container {
     margin-bottom: 40px;
   }
+  [v-cloak]{
+    display: none;
+  }
+
 </style>
 </head>
 <body>
-<div id="app">
+<div id="app" v-cloak>
 <el-container>
   <el-header>Header</el-header>
   <el-main>  
@@ -66,12 +70,12 @@
       <el-table-column
         label="价格"
         width="100">
-        <template  slot-scope="scope">$ {{scope.row.price}} </template>
+        <template  slot-scope="scope">{{scope.row.price | getFinalPrice}} </template>
       </el-table-column>
       <el-table-column
         label="购买数量">
         <template  slot-scope="scope">
-          <el-input-number v-model="scope.row.number" @change="handleChange" :min="1" :max="100" label="描述文字"></el-input-number>
+          <el-input-number v-model="scope.row.number" @change="handleChange" :min="1" :max="100" ></el-input-number>
         </template>
       </el-table-column>
       <el-table-column
@@ -81,11 +85,11 @@
         <el-button
         size="mini"
         type="danger"
-        @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+        @click="handleDelete(scope.$index)">删除</el-button>
     </template>
      </el-table-column>
     </el-table>
-   <h1>总价格：{{total}}</h1>
+   <h1 v-if="tableData.length">总价格：{{totalPrice | getFinalPrice}}</h1> <h1 v-else>购物车已清空</h1>
   </el-col>
     </el-row>
   </el-main>
@@ -107,19 +111,19 @@
         return { 
           tableData: [{
           id:1,
-          name: '王小虎是个什么鬼',
+          name: '王小虎是个什么鬼啊大大说',
           date: '2016-05-02',
           price:43,
           number: 50, 
         },{
           id:2,
-          name: '王小虎是个什么鬼',
+          name: '王小个什么鬼',
           date: '2016-05-02',
           price:33,
           number: 10, 
         },{
           id:3,
-          name: '王小虎是个什么鬼',
+          name: '王小虎是么鬼',
           date: '2016-05-02',
           price:33,
           number: 30, 
@@ -130,20 +134,28 @@
           price:55,
           number: 100, 
         }],
-        total:'',
+        
       }
       },
     methods:{
       handleChange(value) {
         console.log(value);
       },
-      handleDelete(index, row) {
-        console.log(index, row);
+      handleDelete(index) {
+       this.tableData.splice(index,1)
       },
     },
+    computed:{
+      totalPrice(){
+        let total = 0;
+        for(let i = 0; i < this.tableData.length; i++){
+          total  +=  this.tableData[i].price * this.tableData[i].number;
+        }return total
+      }
+    },
     filters:{
-      getFinalPrice(){
-        return "$" + price.toFixed();
+      getFinalPrice(price){
+        return "$" + price.toFixed(2);
       },
     }
     })

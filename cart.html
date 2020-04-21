@@ -2,103 +2,52 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Element  购物车</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Bootstrap  购物车</title>
   <!-- 引入样式 -->
-<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-<style>
-   h1{font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif; text-align: left;}
-    .el-header, .el-footer {
-    background-color: #B3C0D1;
-    color: #333;
-    text-align: center;
-    line-height: 60px;
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" >
+  <style>[v-cloak]{
+    display: none;
   }
-  .el-row {
-    margin-bottom: 20px;
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-  .el-col {
-    border-radius: 4px;
-  }
-
-
-  .el-main {
-    background-color: #E9EEF3;
-    color: #333;
-    text-align: center;
-   
-  }
-  
-  body > .el-container {
-    margin-bottom: 40px;
-  }
-</style>
+ </style>
 </head>
 <body>
-<div id="app">
-<el-container>
-  <el-header>Header</el-header>
-  <el-main>  
-    <el-row>
-    <el-col :span="24"> <el-table
-      :data="tableData" 
-      border
-      stripe
-      style="width: 100%">
-      <el-table-column
-      prop="id"
-      fixed
-      width="60">
-    </el-table-column>
-      <el-table-column
-      prop="name"
-      label="书籍名称"
-      width="250">
-    </el-table-column>
-      <el-table-column
-        prop="date"
-        label="初版日期"
-        width="150">
-      </el-table-column>
-      <el-table-column
-        label="价格"
-        width="100">
-        <template  slot-scope="scope">$ {{scope.row.price}} </template>
-      </el-table-column>
-      <el-table-column
-        label="购买数量">
-        <template  slot-scope="scope">
-          <el-input-number v-model="scope.row.number" @change="handleChange" :min="1" :max="100" label="描述文字"></el-input-number>
-        </template>
-      </el-table-column>
-      <el-table-column
-      label="操作"
-      width="180">
-      <template slot-scope="scope">
-        <el-button
-        size="mini"
-        type="danger"
-        @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-    </template>
-     </el-table-column>
-    </el-table>
-   <h1>总价格：{{total}}</h1>
-  </el-col>
-    </el-row>
-  </el-main>
-  <el-footer>Footer</el-footer>
-</el-container>
+<div id="app" v-cloak>
+  <div class="container">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>书籍名称</th>
+          <th>初版日期</th>
+          <th>价格</th>
+          <th>购买数量</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(item,index) in tableData" :key = "index">
+          <td>{{item.id}}</td>
+          <td>{{item.name}}</td>
+          <td>{{item.date}}</td>
+          <td>{{item.price | getFinalPrice}}</td>
+          <td> 
+            <button id="milus" @click="decreament(index)">-</button>
+            {{item.number}}
+            <button id="plus" @click="increament(index)">+</button>
+          </td>
+          <td><button class="btn btn-danger btn-sm" @click="handleDelete(index)">移除</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="row"><h3 v-if="tableData.length">总金额:{{totalPrice | getFinalPrice}}</h3><h3 v-else>购物车为空</h3></div>
+  </div>
 
-  
-  
+
 </div>
   <!-- import Vue before Element -->
-<script src="https://cdn.bootcss.com/vue/2.6.11/vue.js"></script>
-<!-- 引入组件库 -->
-<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+  <script src="https://cdn.bootcss.com/vue/2.6.11/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 
 <script>
   const app = new Vue({
@@ -107,19 +56,19 @@
         return { 
           tableData: [{
           id:1,
-          name: '王小虎是个什么鬼',
+          name: '王小虎是个什么鬼啊大大说',
           date: '2016-05-02',
           price:43,
           number: 50, 
         },{
           id:2,
-          name: '王小虎是个什么鬼',
+          name: '王小个什么鬼',
           date: '2016-05-02',
           price:33,
           number: 10, 
         },{
           id:3,
-          name: '王小虎是个什么鬼',
+          name: '王小虎是么鬼',
           date: '2016-05-02',
           price:33,
           number: 30, 
@@ -130,20 +79,36 @@
           price:55,
           number: 100, 
         }],
-        total:'',
+        
       }
       },
     methods:{
-      handleChange(value) {
-        console.log(value);
+      increament(index){
+        if(this.tableData[index].number < 100)
+        {
+        this.tableData[index].number ++;
+        }
       },
-      handleDelete(index, row) {
-        console.log(index, row);
+      decreament(index){
+        if(this.tableData[index].number > 0)
+        {
+        this.tableData[index].number --;
+        }
+      },
+      handleDelete(index) {
+        this.tableData.splice(index,1);
       },
     },
+    computed:{
+      totalPrice(){
+        let total = 0 ;
+        for(let i = 0; i < this.tableData.length; i++){
+        total += this.tableData[i].price * this.tableData[i].number;
+      }return total; }
+    },
     filters:{
-      getFinalPrice(){
-        return "$" + price.toFixed();
+      getFinalPrice(price){
+        return "$" + price.toFixed(2);
       },
     }
     })
